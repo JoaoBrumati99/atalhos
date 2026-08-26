@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root {
+    --background-color: #f4f6f8;
+    --background-header: #132539;
+    --background-card: #ffffff;
+    --text-color: #132539;
+    --text-secondary: #687585;
+    --border-color: #e3e7eb;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.14);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(
+        135deg,
+        #132539,
+        #1c3853
+    );
+    color: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+header p {
+    font-size: 15px;
+    color: #cbd5df;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+}
+
+.documentos {
+    width: min(1000px, 90%);
+    margin: 50px auto;
+}
+
+.documentos h2 {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+
+.main_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 100px;
+    padding: 20px;
+    background-color: var(--background-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    box-shadow: var(--shadow);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: #132539;
+}
+
+.card_icon {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background-color: #eef2f5;
+    font-size: 25px;
+}
+
+.card h3 {
+    font-size: 17px;
+    margin-bottom: 5px;
+}
+
+.card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 650px) {
+    header h1 {
+        font-size: 26px;
+    }
+    .main_grid {
+        grid-template-columns: 1fr;
+    }
+    .documentos {
+        width: 90%;
+
+        margin: 30px auto;
+    }
+}

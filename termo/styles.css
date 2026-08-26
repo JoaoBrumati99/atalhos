@@ -1,0 +1,404 @@
+/* ==========================================================================
+   Termo de Equipamento - Amalfis
+   styles.css
+   ========================================================================== */
+
+:root{
+  --azul:#174d7a;
+  --azul2:#0e3555;
+  --fundo:#eef3f7;
+  --verde:#1f8a5b;
+  --borda:#ccd6df;
+
+  /* Medidas da folha A4 usadas na geracao do PDF */
+  --pagina-largura:794px;
+  --pagina-altura:1123px;
+  --pagina-margem:55px;
+
+  /* Distancia do bloco de assinaturas ate a base da folha.
+     Precisa ser maior que a altura do rodape para nao sobrepor. */
+  --assinaturas-base:120px;
+}
+
+/* --------------------------------------------------------------------------
+   Formulario (tela)
+   -------------------------------------------------------------------------- */
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--fundo);
+  color:#1f2933;
+}
+
+.app{max-width:1000px;margin:auto;padding:28px 18px 60px}
+
+h1{margin:0 0 8px;color:var(--azul2)}
+.sub{margin:0 0 24px;color:#667085}
+
+.card{
+  background:#fff;
+  border:1px solid var(--borda);
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 6px 20px #17324d10;
+}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.full{grid-column:1/-1}
+
+label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+
+input,select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--borda);
+  border-radius:8px;
+  font-size:15px;
+  background:#fff;
+}
+
+.checks{display:flex;gap:22px;flex-wrap:wrap;padding:10px 0}
+.checks label{display:flex;align-items:center;gap:7px;font-weight:500;margin:0}
+.checks input{width:auto}
+
+#fotos{padding:9px}
+.hint{font-size:12px;color:#667085;margin-top:6px}
+
+.preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.preview img{
+  width:120px;
+  height:90px;
+  object-fit:cover;
+  border-radius:8px;
+  border:1px solid var(--borda);
+}
+
+.actions{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+.btn{border:0;border-radius:9px;padding:12px 18px;font-weight:700;cursor:pointer}
+.primary{background:var(--verde);color:#fff}
+.secondary{background:#e9eef2;color:#1f2933}
+
+.status{margin-top:12px;font-size:14px;color:#52616b}
+
+/* --------------------------------------------------------------------------
+   Navegacao entre telas (Inicio / Formulario / Consulta)
+   -------------------------------------------------------------------------- */
+
+.view{display:none}
+.view.active{display:block}
+
+.btn-back{
+  border:0;
+  background:none;
+  color:var(--azul);
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  padding:0 0 14px;
+}
+.btn-back:hover{text-decoration:underline}
+
+/* --------------------------------------------------------------------------
+   Tela inicial (menu)
+   -------------------------------------------------------------------------- */
+
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin-top:8px;
+}
+
+.menu-card{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
+  text-align:left;
+  background:#fff;
+  border:1px solid var(--borda);
+  border-radius:14px;
+  padding:22px;
+  cursor:pointer;
+  box-shadow:0 6px 20px #17324d10;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.menu-card:hover{transform:translateY(-2px);box-shadow:0 10px 26px #17324d18}
+
+.menu-icon{font-size:26px}
+.menu-title{font-size:17px;font-weight:800;color:var(--azul2)}
+.menu-desc{font-size:13px;color:#667085;line-height:1.4}
+
+.home-summary{
+  margin-top:22px;
+  font-size:14px;
+  color:#3d4b57;
+}
+
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
+.dot-ativo{background:var(--verde)}
+.dot-encerrado{background:#8a96a3}
+
+.conn-status{
+  margin-top:14px;
+  font-size:13px;
+  color:#8a5b00;
+  background:#fff4de;
+  border:1px solid #ffe1a6;
+  border-radius:10px;
+  padding:10px 14px;
+}
+.conn-status:empty{display:none}
+.conn-status code{background:#fff;border-radius:4px;padding:1px 5px;font-size:12px}
+
+/* --------------------------------------------------------------------------
+   Formulario: campos exclusivos de cada modo
+   -------------------------------------------------------------------------- */
+
+.insert-only{display:none}
+body.mode-inserir .insert-only{display:block}
+
+/* --------------------------------------------------------------------------
+   Consulta de termos
+   -------------------------------------------------------------------------- */
+
+.list-filters{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.list-filters input{flex:2;min-width:220px}
+.list-filters select{flex:1;min-width:160px}
+
+.termos-list{display:flex;flex-direction:column;gap:12px}
+
+.termo-item{
+  border:1px solid var(--borda);
+  border-radius:12px;
+  padding:16px;
+  background:#fff;
+  transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;
+}
+.termo-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 26px #17324d18;
+  border-color:#b9c8d4;
+}
+.termo-item.is-editing{
+  border-color:var(--azul);
+  box-shadow:0 10px 26px #17324d18;
+}
+
+.termo-missing{color:#b3261e}
+
+.termo-main{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+
+.termo-info{display:flex;flex-direction:column;gap:3px;font-size:13.5px;color:#3d4b57}
+.termo-info strong{font-size:15.5px;color:#1f2933}
+.termo-date{color:#667085;font-size:12.5px;margin-top:2px}
+
+.termo-fotos{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.termo-fotos a{display:block;width:56px;height:56px;border-radius:6px;overflow:hidden;border:1px solid var(--borda)}
+.termo-fotos img{width:100%;height:100%;object-fit:cover;display:block}
+
+.badge{
+  flex-shrink:0;
+  font-size:12px;
+  font-weight:800;
+  padding:5px 12px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+.badge-ativo{background:#e4f5eb;color:var(--verde)}
+.badge-encerrado{background:#eceff2;color:#5b6b78}
+
+.termo-actions{display:flex;gap:16px;margin-top:12px}
+
+.btn-link{
+  border:0;
+  background:none;
+  color:var(--azul);
+  font-weight:700;
+  font-size:13px;
+  cursor:pointer;
+  padding:0;
+}
+.btn-link:hover{text-decoration:underline}
+.btn-link-danger{color:#b3261e}
+
+.termo-encerrar-form{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px dashed var(--borda);
+  flex-wrap:wrap;
+}
+.termo-encerrar-form label{margin:0;font-size:13px}
+.termo-encerrar-form input{width:auto}
+
+.empty-state{color:#667085;font-size:14px;padding:18px 0;text-align:center}
+
+/* --------------------------------------------------------------------------
+   Edicao inline de um termo (na tela de Consulta)
+   -------------------------------------------------------------------------- */
+
+.termo-editar-form{
+  margin-top:12px;
+  padding-top:14px;
+  border-top:1px dashed var(--borda);
+}
+
+.termo-editar-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.termo-editar-grid label{font-size:12.5px;margin-bottom:4px}
+.termo-editar-grid input,
+.termo-editar-grid select{
+  width:100%;
+  padding:9px 10px;
+  border:1px solid var(--borda);
+  border-radius:8px;
+  font-size:14px;
+}
+
+.termo-editar-checks{
+  grid-column:1/-1;
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.termo-editar-checks .check-label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:500;
+  font-size:13.5px;
+}
+.termo-editar-checks input{width:auto}
+
+.termo-editar-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  justify-content:flex-end;
+  margin-top:14px;
+}
+.termo-editar-status{font-size:13px;color:#b3261e;margin-right:auto}
+
+/* --------------------------------------------------------------------------
+   Paginas do PDF (renderizadas fora da tela)
+   -------------------------------------------------------------------------- */
+
+.pdf-area{
+  position:absolute;
+  left:-100000px;
+  top:0;
+  width:var(--pagina-largura);
+  background:#fff;
+}
+
+.pdf-page{
+  width:var(--pagina-largura);
+  height:var(--pagina-altura);
+  padding:35px var(--pagina-margem);
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+  color:#111;
+  font-family:"Times New Roman",serif;
+}
+
+.header{text-align:center;margin-bottom:18px}
+
+.pdf-logo{display:block;width:210px;height:auto;margin:0 auto 16px}
+
+.title,
+.page-title{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.35;
+  text-align:center;
+  margin:0;
+}
+
+.term{font-size:15px;line-height:1.52;text-align:justify}
+.included{margin:12px 0 18px}
+.date{text-align:left;margin-top:20px}
+
+/* Conteudo da pagina 2: limita a altura para nunca invadir as assinaturas */
+.conteudo-devolucao{margin-top:55px}
+
+/* --------------------------------------------------------------------------
+   Assinaturas
+   Ancoradas na base da folha, sempre acima do rodape, em qualquer pagina.
+   -------------------------------------------------------------------------- */
+
+.signs{
+  position:absolute;
+  left:var(--pagina-margem);
+  right:var(--pagina-margem);
+  bottom:var(--assinaturas-base);
+}
+
+.sign{text-align:center;font-size:14px}
+.sign + .sign{margin-top:38px}
+
+.line{border-top:1px solid #000;width:330px;margin:0 auto 5px}
+
+/* --------------------------------------------------------------------------
+   Rodape
+   -------------------------------------------------------------------------- */
+
+.footer{
+  position:absolute;
+  left:var(--pagina-margem);
+  right:var(--pagina-margem);
+  bottom:35px;
+  border-top:1px solid #777;
+  padding-top:8px;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:10px;
+  text-align:center;
+  line-height:1.35;
+}
+
+/* --------------------------------------------------------------------------
+   Pagina de fotos
+   -------------------------------------------------------------------------- */
+
+.photos-title{text-align:center;font-weight:bold;font-size:20px;margin:4px 0 22px}
+
+.photos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+
+.photo-box{
+  height:290px;
+  border:1px solid #aaa;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.photo-box img{width:100%;height:100%;object-fit:contain}
+
+/* --------------------------------------------------------------------------
+   Responsivo (apenas o formulario)
+   -------------------------------------------------------------------------- */
+
+@media(max-width:650px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .actions{flex-direction:column}
+  .btn{width:100%}
+  .menu-grid{grid-template-columns:1fr}
+  .list-filters{flex-direction:column}
+  .list-filters input,.list-filters select{width:100%}
+  .termo-main{flex-direction:column}
+  .termo-editar-grid{grid-template-columns:1fr}
+  .termo-editar-actions{flex-wrap:wrap}
+}

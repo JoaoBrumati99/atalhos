@@ -1,0 +1,634 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --ink: #101a2c;
+    --ink-soft: #4a5872;
+    --navy: #1c3a5e;
+    --navy-deep: #0f2540;
+    --accent: #e8963a;
+    --accent-deep: #c97815;
+    --accent-soft: #fbe6c9;
+    --line: #d8e0ec;
+    --bg: #eef2f8;
+    --card: #ffffff;
+    --field-bg: #f7f9fc;
+    --ok-bg: #e2f5ec;
+    --ok-text: #146c43;
+    --ok-border: #b7e4cc;
+    --err-bg: #fbe9e9;
+    --err-text: #a3272c;
+    --err-border: #f3c2c4;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background:
+        radial-gradient(circle, #d9e3f1 1px, transparent 1px) 0 0 / 22px 22px,
+        var(--bg);
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    color: var(--ink);
+}
+
+.container {
+    background: var(--card);
+    max-width: 800px;
+    width: 100%;
+    padding: 38px 40px 34px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(16, 26, 44, 0.04), 0 18px 40px -22px rgba(16, 26, 44, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+        -45deg,
+        var(--navy) 0px,
+        var(--navy) 10px,
+        var(--accent) 10px,
+        var(--accent) 20px
+    );
+}
+
+h1 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy-deep);
+    margin-top: 6px;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+}
+
+h1::before {
+    content: "Inventário de TI";
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: 8px;
+}
+
+form {
+    margin-top: 26px;
+}
+
+.edit-banner {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-deep);
+    color: var(--navy-deep);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.edit-banner .btn-link {
+    color: var(--accent-deep);
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 20px;
+    margin-bottom: 18px;
+}
+
+.form-group {
+    flex: 1 1 calc(50% - 10px);
+    min-width: 180px;
+}
+
+.form-group.full {
+    flex: 1 1 100%;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+label .required {
+    color: var(--accent-deep);
+    margin-left: 2px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 14.5px;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--field-bg);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #9aa7bd;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--navy);
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(28, 58, 94, 0.12);
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5872' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+/* Campos de patrimônio, número de série e IMEI com estilo diferenciado */
+.form-group:has(#patrimonio) input,
+.form-group:has(#numeroSerie) input,
+.form-group:has(#imei) input {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: var(--accent-soft);
+    border: 1px dashed var(--accent-deep);
+    color: var(--navy-deep);
+}
+
+.form-group:has(#patrimonio) input:focus,
+.form-group:has(#numeroSerie) input:focus,
+.form-group:has(#imei) input:focus {
+    border-style: solid;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(232, 150, 58, 0.22);
+}
+
+/* Seletor de tipo de equipamento */
+.tipo-equip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tipo-equip-btn {
+    flex: 1 1 calc(25% - 8px);
+    min-width: 130px;
+    background: var(--field-bg);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    padding: 14px 10px;
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.tipo-equip-btn:hover {
+    border-color: var(--navy);
+    color: var(--navy-deep);
+}
+
+.tipo-equip-btn.active {
+    background: var(--navy-deep);
+    color: #fff;
+    border-color: var(--navy-deep);
+    transform: translateY(-1px);
+}
+
+/* Botão principal de envio */
+.btn-enviar {
+    background: var(--navy-deep);
+    color: #fff;
+    border: none;
+    padding: 15px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+    margin-top: 10px;
+    letter-spacing: 0.02em;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15) inset, 0 10px 20px -12px rgba(15, 37, 64, 0.55);
+}
+
+.btn-enviar:hover {
+    background: var(--navy);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px var(--accent-soft), 0 12px 22px -12px rgba(15, 37, 64, 0.6);
+}
+
+.btn-enviar:active {
+    transform: translateY(0);
+}
+
+.btn-enviar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Botão de alternância (Adicionar Periféricos) */
+.btn-toggle {
+    background: var(--accent);
+    color: var(--navy-deep);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.02em;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-toggle:hover {
+    background: var(--accent-deep);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-toggle:active {
+    transform: translateY(0);
+}
+
+/* Mensagens de feedback */
+#mensagem {
+    margin-top: 20px;
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    display: none;
+}
+
+.sucesso {
+    background: var(--ok-bg);
+    color: var(--ok-text);
+    border: 1px solid var(--ok-border);
+    display: block !important;
+}
+
+.erro {
+    background: var(--err-bg);
+    color: var(--err-text);
+    border: 1px solid var(--err-border);
+    display: block !important;
+}
+
+.carregando {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+small {
+    color: #8a97ab;
+    font-size: 12px;
+    display: block;
+    margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Navegação entre views (Cadastrar / Consultar)
+   -------------------------------------------------------------------------- */
+
+.view { display: none; }
+.view.active { display: block; }
+
+.top-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: var(--field-bg);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab-btn:hover {
+    border-color: var(--navy);
+    color: var(--navy-deep);
+}
+
+.tab-btn.active {
+    background: var(--navy-deep);
+    color: #fff;
+    border-color: var(--navy-deep);
+}
+
+/* --------------------------------------------------------------------------
+   Consulta: sub-abas (Equipamentos / Periféricos)
+   -------------------------------------------------------------------------- */
+
+.sub-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 18px 0 20px;
+}
+
+.sub-tab-btn {
+    background: #fff;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sub-tab-btn:hover {
+    border-color: var(--accent-deep);
+}
+
+.sub-tab-btn.active {
+    background: var(--accent);
+    color: var(--navy-deep);
+    border-color: var(--accent-deep);
+}
+
+/* --------------------------------------------------------------------------
+   Consulta: filtros
+   -------------------------------------------------------------------------- */
+
+.list-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.list-filters input {
+    flex: 2;
+    min-width: 220px;
+}
+
+.list-filters select {
+    flex: 1;
+    min-width: 170px;
+}
+
+.btn-refresh {
+    background: var(--field-bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0 16px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.btn-refresh:hover {
+    background: var(--accent-soft);
+    transform: rotate(45deg);
+}
+
+.lista-resumo {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 10px 2px 14px;
+}
+
+.stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 2px 4px;
+}
+
+.stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--field-bg);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+}
+
+.stat-ativo strong { color: var(--ok-text); }
+.stat-disponivel strong { color: #1c4c8c; }
+
+.item-tipo-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Consulta: cards de itens
+   -------------------------------------------------------------------------- */
+
+.lista-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.item-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    background: #fff;
+}
+
+.item-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+}
+
+.item-info strong {
+    font-size: 15.5px;
+    color: var(--navy-deep);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.item-specs {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+}
+
+.item-obs {
+    margin-top: 4px;
+    font-style: italic;
+    color: #7c8aa0;
+}
+
+.badge {
+    flex-shrink: 0;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.badge-em-uso { background: var(--ok-bg); color: var(--ok-text); }
+.badge-disponivel { background: #e2ecf9; color: #1c4c8c; }
+.badge-manutencao { background: var(--accent-soft); color: var(--accent-deep); }
+.badge-descartado { background: #e7e9ee; color: #5b6b78; }
+.badge-extraviado { background: var(--err-bg); color: var(--err-text); }
+.badge-outro { background: #e7e9ee; color: #5b6b78; }
+
+.item-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+}
+
+.item-status-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+}
+
+.item-status-form label {
+    margin: 0;
+    font-size: 12.5px;
+    text-transform: none;
+}
+
+.item-status-form select {
+    width: auto;
+    min-width: 170px;
+    padding: 8px 30px 8px 10px;
+    font-size: 13.5px;
+}
+
+.item-status-form .btn-salvar-status {
+    background: var(--navy-deep);
+    color: #fff;
+    border: none;
+    width: auto;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.item-status-form .btn-salvar-status:hover {
+    background: var(--navy);
+}
+
+.item-status-form .btn-salvar-status:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-link {
+    border: 0;
+    background: none;
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-link:hover { text-decoration: underline; }
+.btn-link-danger { color: var(--err-text); }
+
+.empty-state {
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 22px 0;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    body { padding: 20px 12px; }
+    .container { padding: 26px 22px; }
+    .form-group { flex: 1 1 100%; }
+    .top-nav { flex-direction: column; }
+    .list-filters { flex-direction: column; }
+    .list-filters input, .list-filters select, .btn-refresh { width: 100%; }
+    .item-main { flex-direction: column; }
+    .tipo-equip-btn { flex: 1 1 calc(50% - 8px); }
+}

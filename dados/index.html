@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Equipamentos e Periféricos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="top-nav">
+            <button type="button" class="tab-btn active" data-view="cadastro">📦 Cadastrar</button>
+            <button type="button" class="tab-btn" data-view="consulta">🔍 Consultar</button>
+        </div>
+
+        <!-- ======================= VIEW: CADASTRO ======================= -->
+        <div class="view active" id="view-cadastro">
+        <h1>📦 Cadastro de Equipamento</h1>
+
+        <div class="edit-banner" id="editBanner" hidden>
+            ✏️ <span id="editBannerTexto">Editando registro.</span>
+            <button type="button" id="btnCancelarEdicao" class="btn-link">Cancelar edição</button>
+        </div>
+
+        <form id="formEquipamento">
+            <!-- Linha 0: Tipo de equipamento -->
+            <div class="form-row">
+                <div class="form-group full">
+                    <label>Tipo de Equipamento <span class="required">*</span></label>
+                    <div class="tipo-equip-group" id="tipoEquipGroup">
+                        <button type="button" class="tipo-equip-btn" data-tipo="Notebook">💻 Notebook</button>
+                        <button type="button" class="tipo-equip-btn" data-tipo="Desktop">🖥️ Desktop</button>
+                        <button type="button" class="tipo-equip-btn" data-tipo="Celular">📱 Celular</button>
+                        <button type="button" class="tipo-equip-btn" data-tipo="Tablet">📱 Tablet</button>
+                    </div>
+                    <input type="hidden" id="tipoEquipamento" name="tipoEquipamento" required>
+                </div>
+            </div>
+
+            <!-- Linha 1 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="marca">Marca <span class="required">*</span></label>
+                    <input type="text" id="marca" name="marca" placeholder="Ex: Dell, HP, Lenovo, Samsung, Apple" required>
+                </div>
+                <div class="form-group">
+                    <label for="modelo">Modelo <span class="required">*</span></label>
+                    <input type="text" id="modelo" name="modelo" placeholder="Ex: Latitude 3420, Galaxy A54" required>
+                </div>
+            </div>
+
+            <!-- Linha 2 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="patrimonio">Patrimônio <span class="required">*</span></label>
+                    <input type="text" id="patrimonio" name="patrimonio" placeholder="Número do patrimônio" required>
+                </div>
+                <div class="form-group campo-pc" id="grupoNumeroSerie">
+                    <label for="numeroSerie">Número de Série <span class="required">*</span></label>
+                    <input type="text" id="numeroSerie" name="numeroSerie" placeholder="S/N do equipamento">
+                </div>
+                <div class="form-group campo-mobile" id="grupoImei">
+                    <label for="imei">Número de IMEI <span class="required">*</span></label>
+                    <input type="text" id="imei" name="imei" placeholder="IMEI do aparelho">
+                </div>
+            </div>
+
+            <!-- Linha 3 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="setorResponsavel">Setor Responsável <span class="required">*</span></label>
+                    <input type="text" id="setorResponsavel" name="setorResponsavel" placeholder="Ex: TI, RH, Finanças" required>
+                </div>
+                <div class="form-group">
+                    <label for="pessoaResponsavel">Pessoa Responsável <span class="required">*</span></label>
+                    <input type="text" id="pessoaResponsavel" name="pessoaResponsavel" placeholder="Nome do responsável" required>
+                </div>
+            </div>
+
+            <!-- Linha 4 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">E-mail Cadastrado</label>
+                    <input type="email" id="email" name="email" placeholder="email@dominio.com">
+                </div>
+                <div class="form-group campo-pc" id="grupoProcessador">
+                    <label for="processador">Processador</label>
+                    <input type="text" id="processador" name="processador" placeholder="Ex: Intel i5-1135G7">
+                </div>
+            </div>
+
+            <!-- Linha 5 -->
+            <div class="form-row campo-pc">
+                <div class="form-group">
+                    <label for="ramInstalada">RAM Instalada (GB) <span class="required">*</span></label>
+                    <input type="number" id="ramInstalada" name="ramInstalada" placeholder="8" min="0" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label for="slotsRamLivres">Slots de RAM Livres</label>
+                    <input type="number" id="slotsRamLivres" name="slotsRamLivres" placeholder="0" min="0" step="1">
+                </div>
+            </div>
+
+            <!-- Linha 6 -->
+            <div class="form-row campo-pc">
+                <div class="form-group">
+                    <label for="armazenamento">Armazenamento (GB) <span class="required">*</span></label>
+                    <input type="number" id="armazenamento" name="armazenamento" placeholder="256" min="0" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="tipoArmazenamento">Tipo de Armazenamento</label>
+                    <select id="tipoArmazenamento" name="tipoArmazenamento">
+                        <option value="">Selecione</option>
+                        <option value="HD">HD</option>
+                        <option value="SSD SATA">SSD SATA</option>
+                        <option value="SSD NVMe">SSD NVMe</option>
+                        <option value="eMMC">eMMC</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Linha 7 -->
+            <div class="form-row campo-pc">
+                <div class="form-group">
+                    <label for="placaVideo">Placa de Vídeo</label>
+                    <input type="text" id="placaVideo" name="placaVideo" placeholder="Ex: Intel UHD Graphics, NVIDIA T600">
+                </div>
+                <div class="form-group">
+                    <label for="sistemaOperacional">Sistema Operacional <span class="required">*</span></label>
+                    <select id="sistemaOperacional" name="sistemaOperacional">
+                        <option value="">Selecione</option>
+                        <option value="Windows 10">Windows 10</option>
+                        <option value="Windows 11">Windows 11</option>
+                        <option value="Windows Server">Windows Server</option>
+                        <option value="Linux">Linux</option>
+                        <option value="macOS">macOS</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Linha 8 -->
+            <div class="form-row">
+                <div class="form-group campo-pc">
+                    <label for="versaoWindows">Versão Windows (se aplicável)</label>
+                    <input type="text" id="versaoWindows" name="versaoWindows" placeholder="Ex: 22H2, Pro, Enterprise">
+                </div>
+                <div class="form-group">
+                    <label for="situacao">Situação <span class="required">*</span></label>
+                    <select id="situacao" name="situacao" required>
+                        <option value="">Selecione</option>
+                        <option value="Em uso">Em uso</option>
+                        <option value="Disponível">Disponível</option>
+                        <option value="Em manutenção">Em manutenção</option>
+                        <option value="Descartado">Descartado</option>
+                        <option value="Extraviado">Extraviado</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Observações -->
+            <div class="form-row">
+                <div class="form-group full">
+                    <label for="observacoes">Observações</label>
+                    <textarea id="observacoes" name="observacoes" placeholder="Informações adicionais..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar" id="btnEnviar">📤 Enviar para o Banco de Dados</button>
+        </form>
+
+        <!-- Botão para alternar formulário de periféricos -->
+        <button type="button" id="btnTogglePerifericos" class="btn-toggle">➕ Adicionar Periféricos</button>
+
+        <!-- Formulário de Periféricos (inicialmente oculto) -->
+        <div id="formPerifericosContainer" style="display: none; margin-top: 30px; border-top: 2px solid var(--line); padding-top: 20px;">
+            <h2 style="font-size: 20px; font-weight: 600; color: var(--navy-deep);">🖥️ Cadastro de Periféricos</h2>
+            <form id="formPeriferico">
+                <!-- Linha 1: Marca + Modelo -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="marcaPeriferico">Marca <span class="required">*</span></label>
+                        <input type="text" id="marcaPeriferico" name="marcaPeriferico" placeholder="Ex: Logitech, Dell" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modeloPeriferico">Modelo <span class="required">*</span></label>
+                        <input type="text" id="modeloPeriferico" name="modeloPeriferico" placeholder="Ex: MX Master 3" required>
+                    </div>
+                </div>
+
+                <!-- Linha 2: Patrimônio + Tipo de Cabo -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patrimonioPeriferico">Patrimônio <span class="required">*</span></label>
+                        <input type="text" id="patrimonioPeriferico" name="patrimonioPeriferico" placeholder="Número do patrimônio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoCabo">Tipo de Cabo</label>
+                        <select id="tipoCabo" name="tipoCabo">
+                            <option value="">Selecione (se for cabo)</option>
+                            <option value="HDMI">HDMI</option>
+                            <option value="DisplayPort">DisplayPort</option>
+                            <option value="VGA">VGA</option>
+                            <option value="DVI">DVI</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Linha 3: Situação (agora ocupa meia largura) -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="situacaoPeriferico">Situação <span class="required">*</span></label>
+                        <select id="situacaoPeriferico" name="situacaoPeriferico" required>
+                            <option value="">Selecione</option>
+                            <option value="Em uso">Em uso</option>
+                            <option value="Disponível">Disponível</option>
+                            <option value="Em manutenção">Em manutenção</option>
+                            <option value="Descartado">Descartado</option>
+                            <option value="Extraviado">Extraviado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <!-- Espaço vazio para manter alinhamento -->
+                    </div>
+                </div>
+
+                <!-- Observações -->
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label for="observacoesPeriferico">Observações</label>
+                        <textarea id="observacoesPeriferico" name="observacoesPeriferico" placeholder="Informações adicionais..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-enviar" id="btnEnviarPeriferico">📤 Enviar Periférico</button>
+            </form>
+        </div>
+
+        <div id="mensagem"></div>
+        </div>
+        <!-- ======================= FIM VIEW: CADASTRO ======================= -->
+
+        <!-- ======================= VIEW: CONSULTA ======================= -->
+        <div class="view" id="view-consulta">
+            <h1>🔍 Consultar Cadastros</h1>
+
+            <div class="sub-tabs">
+                <button type="button" class="sub-tab-btn active" data-tipo="Notebook">💻 Notebooks</button>
+                <button type="button" class="sub-tab-btn" data-tipo="Desktop">🖥️ Desktops</button>
+                <button type="button" class="sub-tab-btn" data-tipo="Celular">📱 Celulares</button>
+                <button type="button" class="sub-tab-btn" data-tipo="Tablet">📱 Tablets</button>
+                <button type="button" class="sub-tab-btn" data-tipo="perifericos">🖱️ Periféricos</button>
+            </div>
+
+            <div class="list-filters">
+                <input type="text" id="filtroBusca" placeholder="Buscar por marca, modelo, patrimônio, responsável...">
+                <select id="filtroSituacao">
+                    <option value="todos">Todas as situações</option>
+                    <option value="Em uso">Em uso</option>
+                    <option value="Disponível">Disponível</option>
+                    <option value="Em manutenção">Em manutenção</option>
+                    <option value="Descartado">Descartado</option>
+                    <option value="Extraviado">Extraviado</option>
+                    <option value="Outro">Outro</option>
+                </select>
+                <button type="button" id="btnAtualizarLista" class="btn-refresh" title="Atualizar lista">🔄</button>
+            </div>
+
+            <div class="stats-bar" id="statsBar" hidden>
+                <span class="stat-pill stat-ativo">🟢 <strong id="statAtivos">0</strong> em uso</span>
+                <span class="stat-pill stat-disponivel">🔵 <strong id="statDisponiveis">0</strong> disponíveis</span>
+            </div>
+
+            <div class="lista-resumo" id="listaResumo"></div>
+            <div class="lista-container" id="listaContainer"></div>
+            <div class="empty-state" id="listaEmpty" hidden>Nenhum registro encontrado.</div>
+        </div>
+        <!-- ======================= FIM VIEW: CONSULTA ======================= -->
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>

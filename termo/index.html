@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termo de Equipamento - Amalfis</title>
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<!-- ======================= Tela inicial (menu) ======================= -->
+<div class="app view active" id="view-home">
+  <h1>Termos de Equipamento</h1>
+  <p class="sub">Amalfis &middot; controle de entrega e devolução de equipamentos.</p>
+
+  <div class="menu-grid">
+    <button class="menu-card" type="button" data-action="criar">
+      <span class="menu-icon" aria-hidden="true">📝</span>
+      <span class="menu-title">Criar Termo</span>
+      <span class="menu-desc">Preencha os dados, adicione fotos e gere o PDF do termo de responsabilidade.</span>
+    </button>
+
+    <button class="menu-card" type="button" data-action="inserir">
+      <span class="menu-icon" aria-hidden="true">➕</span>
+      <span class="menu-title">Inserir Termo</span>
+      <span class="menu-desc">Cadastre no sistema um termo que já existe em papel, sem gerar um novo PDF.</span>
+    </button>
+
+    <button class="menu-card" type="button" data-action="consultar">
+      <span class="menu-icon" aria-hidden="true">🔍</span>
+      <span class="menu-title">Consultar Termos</span>
+      <span class="menu-desc">Veja todos os termos cadastrados e o status: ativo ou encerrado (devolvido).</span>
+    </button>
+  </div>
+
+  <div class="home-summary" id="homeSummary"></div>
+  <div class="conn-status" id="connStatus"></div>
+</div>
+
+<!-- ======================= Formulario (Criar / Inserir) ======================= -->
+<div class="app view" id="view-form">
+  <button class="btn-back" type="button" data-back>&larr; Voltar ao início</button>
+  <h1 id="formTitle">Criar Termo</h1>
+  <p class="sub" id="formSub">Preencha os dados, adicione as fotos e gere o PDF automaticamente.</p>
+
+  <div class="card">
+    <form id="form">
+      <div class="grid">
+
+        <div>
+          <label>Tipo de equipamento</label>
+          <select id="tipo" required>
+            <option value="">Selecione</option>
+            <option>Notebook/Desktop</option>
+            <option>Celular</option>
+            <option>Tablet</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Nome completo</label>
+          <input id="nome" required>
+        </div>
+
+        <div>
+          <label>CPF</label>
+          <input id="cpf" inputmode="numeric" maxlength="14" required placeholder="000.000.000-00">
+        </div>
+
+        <div>
+          <label>E-mail cadastrado</label>
+          <input id="email" type="email" required placeholder="nome@empresa.com">
+        </div>
+
+        <div>
+          <label>Número do celular</label>
+          <input id="celular" inputmode="numeric" maxlength="15" required placeholder="(00) 00000-0000">
+          <div class="hint">E-mail e celular aparecem só na Consulta, não entram no PDF do termo.</div>
+        </div>
+
+        <div>
+          <label>Aparelho</label>
+          <input id="aparelho" required placeholder="Ex.: Notebook">
+        </div>
+
+        <div>
+          <label>Modelo</label>
+          <input id="modelo" required>
+        </div>
+
+        <div>
+          <label>IMEI <span style="font-weight:400">(se não possuir, deixe vazio)</span></label>
+          <input id="imei" placeholder="N/A">
+        </div>
+
+        <div>
+          <label>Patrimônio</label>
+          <input id="patrimonio" required>
+        </div>
+
+        <div class="full">
+          <label>Itens incluídos</label>
+          <div class="checks">
+            <label><input type="checkbox" id="carregador"> Carregador</label>
+            <label><input type="checkbox" id="capinha"> Capinha</label>
+            <label><input type="checkbox" id="pelicula"> Película</label>
+          </div>
+        </div>
+
+        <!-- Campos exclusivos do modo "Inserir Termo" -->
+        <div class="insert-only">
+          <label>Data de entrega do equipamento</label>
+          <input id="dataEntrega" type="date">
+        </div>
+
+        <div class="insert-only">
+          <label>Situação atual</label>
+          <select id="statusInicial">
+            <option value="ativo">Ativo (equipamento com o cliente)</option>
+            <option value="encerrado">Encerrado (já foi devolvido)</option>
+          </select>
+        </div>
+
+        <div class="insert-only" id="dataDevolucaoWrap" hidden>
+          <label>Data da devolução</label>
+          <input id="dataDevolucaoInicial" type="date">
+        </div>
+
+        <div class="full">
+          <label>Fotos do equipamento</label>
+          <input id="fotos" type="file" accept="image/*" multiple>
+          <div class="hint" id="fotosHint">Você pode selecionar várias fotos.</div>
+          <div class="preview" id="preview"></div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" type="reset">Limpar</button>
+        <button class="btn primary" type="submit" id="submitBtn">Gerar PDF</button>
+      </div>
+
+      <div class="status" id="status"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ======================= Consulta de termos ======================= -->
+<div class="app view" id="view-list">
+  <button class="btn-back" type="button" data-back>&larr; Voltar ao início</button>
+  <h1>Consultar Termos</h1>
+  <p class="sub">Verifique se o equipamento continua ativo com o cliente ou se já foi devolvido.</p>
+
+  <div class="card">
+    <div class="list-filters">
+      <input id="filtroBusca" placeholder="Buscar por nome, CPF ou patrimônio...">
+      <select id="filtroStatus">
+        <option value="todos">Todos os status</option>
+        <option value="ativo">Somente ativos</option>
+        <option value="encerrado">Somente encerrados</option>
+      </select>
+    </div>
+
+    <div class="termos-list" id="termosList"></div>
+    <div class="empty-state" id="listEmpty" hidden>Nenhum termo encontrado.</div>
+  </div>
+</div>
+
+<!-- ======================= Paginas do PDF ======================= -->
+<div class="pdf-area" id="pdfArea">
+
+  <!-- Pagina 1 - Termo de recebimento -->
+  <section class="pdf-page" id="page1">
+    <div class="header">
+      <img class="pdf-logo" data-logo alt="AMALFIS">
+      <div class="title">TERMO DE CIÊNCIA E RESPONSABILIDADE DE RECEBIMENTO DE<br>EQUIPAMENTO</div>
+    </div>
+
+    <div class="term" id="termo"></div>
+    <div class="included" id="incluidos"></div>
+
+    <div class="term">
+      <p>Estou ciente de que a utilização do equipamento é única e exclusivamente corporativa e visa tão somente apoio à função exercida na empresa AMALFIS UNIFORMES CONFECCAO DE ROUPAS LTDA (MATRIZ) CNPJ: 11.744.716/0001-10, descaracterizando qualquer pretensão e/ou reivindicação sob qualquer título e/ou pretexto.</p>
+      <p>Comprometo-me a devolver o aparelho em caso de desligamento, no mesmo estado recebido, ressalvado o seu desgaste natural do uso, ou, ainda, quando solicitado pela empresa.</p>
+      <p>Estou ciente e de acordo que caso não ocorra a entrega dos equipamentos no momento da extinção do meu contrato de trabalho ou quando solicitado, independentemente do motivo, a empresa poderá realizar os devidos descontos das minhas verbas rescisórias ou de meu salário, correspondentes ao valor da época do equipamento não devolvido.</p>
+      <p>Qualquer dano causado ao aparelho ou aos equipamentos, assim como na hipótese de extravio, furto ou roubo, independente de minha culpa e/ou dolo, deverá ser imediatamente comunicado à empresa e prontamente ressarcido o valor correspondente ao dano ocasionado.</p>
+      <p>Fica terminantemente proibida a cessão, locação, transferência, alienação, empréstimo e/ou qualquer outro ato jurídico, dos equipamentos a terceiros, sem anuência prévia e escrita da empresa.</p>
+    </div>
+
+    <div class="date" id="data"></div>
+
+    <div class="signs">
+      <div class="sign"><div class="line"></div>Assinatura do T.I</div>
+      <div class="sign"><div class="line"></div>Assinatura do Usuário</div>
+    </div>
+
+    <div class="footer">Amalfis Uniformes Confecção de Roupas Ltda. - ME<br>CNPJ: 11.744.716/0001-10 &nbsp; Insc. Est. 454.365.223.112<br>Av. Valentina Mello Freire Borenstein, 450 - Vila São Francisco, Mogi das Cruzes - SP, 08735-270</div>
+  </section>
+
+  <!-- Pagina 2 - Comprovante de devolucao -->
+  <section class="pdf-page" id="page2">
+    <div class="header">
+      <img class="pdf-logo" data-logo alt="AMALFIS">
+      <div class="page-title">TERMO DE CIÊNCIA<br>COMPROVANTE DE DEVOLUÇÃO DE EQUIPAMENTO</div>
+    </div>
+
+    <div class="term conteudo-devolucao">
+      <p>Eu, <b id="nome2"></b>, devolvo, nesta data, para a empresa os aparelhos e seus acessórios definidos abaixo.</p>
+      <p style="text-align:center;margin-top:40px">O aparelho está em boas condições de uso: Sim ( &nbsp; ) &nbsp; Não ( &nbsp; )</p>
+      <p style="text-align:center;margin-top:40px"><b>Equipamentos devolvidos:</b></p>
+      <p style="text-align:center">( &nbsp; ) Celular &nbsp;&nbsp; ( &nbsp; ) Carregador &nbsp;&nbsp; ( &nbsp; ) Cabo de Dados &nbsp;&nbsp; ( &nbsp; ) Fone de Ouvido &nbsp;&nbsp; ( &nbsp; ) Chip &nbsp;&nbsp; ( &nbsp; ) Outros</p>
+      <p>Especificar: __________________________________________________________________________</p>
+      <p>________________________________________________________________________________</p>
+      <p style="margin-top:32px">OBS: _____________________________________________________________________________</p>
+      <p>________________________________________________________________________________</p>
+      <p style="margin-top:30px">Data: ____ / ____ / ______.</p>
+    </div>
+
+    <div class="signs">
+      <div class="sign"><div class="line"></div>Assinatura do T.I</div>
+      <div class="sign"><div class="line"></div>Assinatura do Usuário</div>
+    </div>
+
+    <div class="footer">Amalfis Uniformes Confecção de Roupas Ltda. - ME<br>CNPJ: 11.744.716/0001-10 &nbsp; Insc. Est. 454.365.223.112<br>Av. Valentina Mello Freire Borenstein, 450 - Vila São Francisco, Mogi das Cruzes - SP, 08735-270</div>
+  </section>
+
+  <!-- Pagina 3 - Imagens do equipamento -->
+  <section class="pdf-page" id="page3">
+    <div class="header">
+      <img class="pdf-logo" data-logo alt="AMALFIS">
+      <div class="page-title">IMAGENS DO EQUIPAMENTO</div>
+    </div>
+
+    <div class="photos-grid" id="photosPdf"></div>
+
+    <div class="footer">Amalfis Uniformes Confecção de Roupas Ltda. - ME<br>CNPJ: 11.744.716/0001-10 &nbsp; Insc. Est. 454.365.223.112<br>Av. Valentina Mello Freire Borenstein, 450 - Vila São Francisco, Mogi das Cruzes - SP, 08735-270</div>
+  </section>
+
+</div>
+
+<script src="logo.js"></script>
+<script src="supabase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
