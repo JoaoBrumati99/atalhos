@@ -1,0 +1,31 @@
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    env:
+      SUPABASE_PROJECT_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+    steps:
+      - name: Check Supabase configuration
+        run: |
+          test -n "$SUPABASE_PROJECT_URL" || { echo "Missing SUPABASE_PROJECT_URL secret"; exit 1; }
+          test -n "$SUPABASE_ANON_KEY" || { echo "Missing SUPABASE_ANON_KEY secret"; exit 1; }
+
+      - name: Run read-only query
+        run: |
+          curl --fail --silent --show-error --output /dev/null \
+            --get "$SUPABASE_PROJECT_URL/rest/v1/termos" \
+            --header "apikey: $SUPABASE_ANON_KEY" \
+            --header "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            --data-urlencode "select=id" \
+            --data-urlencode "limit=1"

@@ -28,6 +28,23 @@ mesmo abrindo o index.html direto do disco (file://), sem erro de CORS/canvas.
 5. Salve tudo, abra (ou recarregue) o index.html. A tela inicial mostra um
    aviso amarelo se algo ainda não estiver configurado corretamente.
 
+## Evitar pausa por inatividade no plano gratuito
+O repositorio inclui um GitHub Actions que faz diariamente uma consulta
+somente de leitura (seleciona no maximo um ID da tabela "termos"). Para
+ativa-lo:
+1. No GitHub, abra **Settings > Secrets and variables > Actions** e crie os
+   secrets `SUPABASE_PROJECT_URL` (Project URL) e `SUPABASE_ANON_KEY`
+   (chave anon/publishable do projeto).
+2. Envie o workflow `.github/workflows/supabase-keepalive.yml` para a branch
+   padrao do repositorio. Na aba **Actions**, habilite os workflows se o
+   GitHub solicitar.
+3. A tarefa roda diariamente às 06:17 UTC e tambem pode ser executada
+   manualmente pela aba **Actions**.
+
+O workflow nao usa a service role key, nao grava dados e descarta a resposta
+da consulta. O GitHub pode atrasar execucoes agendadas, portanto isso reduz
+o risco de pausa por inatividade, mas nao e uma garantia do Supabase.
+
 ## Novos campos: E-mail e Celular
 O formulário agora pede o e-mail cadastrado e o número de celular da pessoa.
 Esses dois campos ficam salvos no banco e aparecem apenas na tela de
